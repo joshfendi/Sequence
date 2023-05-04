@@ -1,0 +1,172 @@
+Joshua Fendi
+805343353
+4/25/23
+
+
+
+
+Description of Design
+    My doubly linked list is circular. An empty linked list consists of
+    a head node that has a next node that points to itself and a back
+    node that also points to itself. The head node has an unitialized value
+    of ItemType. Each Node has a value of type ItemType, pointer named "next" 
+    which points to the next element in the linked list, and a pointer named 
+    "prev" which points to the previous element in the linked list.
+
+
+
+
+
+Pseudocod
+    int Sequence::insert(int pos, const ItemType &value)
+        not valid
+            return -1
+        valid
+            insert pos
+            return pos 
+    
+    int Sequence::insert(const ItemType &value)
+        iterate current until found first instance of pos
+        insert at pos
+        return pos
+    
+    bool Sequence::erase(int pos)
+        not valid
+            return false
+        valid
+            point current to pos
+            fix pointers
+            delete current
+            descrement size
+            return true
+    
+    int Sequence::remove(const ItemType &value)
+        iterate current through list
+            if value is the same as current value
+                delete pos
+                decrement current and pos to recheck this pos
+                increment count
+            go to next element
+        return count
+
+    bool Sequence::get(int pos, ItemType &value) const
+        if not valid  
+            return false
+        valid
+            iterate current until at target node
+            set value
+            return true
+    
+    bool Sequence::set(int pos, const ItemType &value)
+        if not valid
+            return false
+        valid
+            iterate current until at target node
+            set current valie
+            return true
+
+    int Sequence::find(const ItemType &value) const
+        iterate through list
+            if found value
+                return position
+            increment, continue looking through list
+        return -1, no item found
+
+    int subsequence(const Sequence &seq1, const Sequence &seq2)
+        if not valid
+            return -1
+        valid, theres possibility of finding subsequent
+            iterate through seq1
+                found match to first element of seq2
+                    found valid subsequence
+                        found = true
+                        break
+                    not valid subsequence
+                        break
+                if found
+                    return pos in index1
+        return -1 if no subsequence
+
+    void concatReverse(const Sequence &seq1, const Sequence &seq2, Sequence &result)
+        temporary Sequence
+        if seq2 is not empty
+            iterate through seq2
+            insert elements into first position of temp
+        if seq1 is not empty
+            iterate through seq1
+            insert elements into first position of temp
+        swap temp and result
+
+
+
+
+
+
+
+Test Cases
+    int main()
+{
+    // Default Constructor
+    Sequence s; // empty
+
+    // For empty sequence
+    assert(s.size() == 0);                // test size
+    assert(s.empty() == true);            // test empty
+    assert(s.remove("madeUpThing") == 0); // nothing to remove
+    assert(s.set(0, "set") == false);     // nothing to set
+
+    ItemType str;
+    assert(s.get(0, str) == false); // nothing to get
+
+    // test inserts
+    assert(s.insert(0, "Now index 0") == 0);
+    assert(s.insert("Now index 0") == 0);
+    assert(s.insert("now index 2") == 2);
+
+    // test find
+    assert(s.find("Now index 0") == 0);
+    assert(s.find("random") == -1);
+
+    // test swap and get
+    Sequence s2;
+    s2.insert("newSeq");
+    s.swap(s2);
+    std::string get;
+    assert(s.get(0, get) == true);
+    assert(get == "newSeq");
+
+    Sequence sub1;
+    sub1.insert(0, "0");
+    sub1.insert(1, "1");
+    sub1.insert(2, "0");
+    sub1.insert(3, "1");
+    sub1.insert(4, "2");
+    Sequence sub2;
+    sub2.insert(0, "0");
+    sub2.insert(1, "1");
+    sub2.insert(2, "2");
+
+    // test subsequence
+    assert(subsequence(sub1, sub2) == 2);
+
+    // test concatReverse
+    Sequence result;
+    ItemType resultFirstELement;
+    concatReverse(sub1,sub2,result);
+    result.get(0,resultFirstELement);
+    assert(resultFirstELement=="2");
+
+    // Copy Constructor
+    Sequence copied = sub2;
+    ItemType firstCopied;
+    copied.get(0,firstCopied);
+    assert(firstCopied == "0");
+
+    // Assignment Operator
+    result = copied;
+    ItemType firstResult;
+    result.get(0,firstResult);
+    assert(firstResult == "0");
+
+    std::cout << "passed all test cases" << std::endl;
+}
