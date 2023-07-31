@@ -17,7 +17,7 @@ Description of Design
 
 
 
-Pseudocod
+Pseudocode
     int Sequence::insert(int pos, const ItemType &value)
         not valid
             return -1
